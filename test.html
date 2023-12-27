@@ -13,13 +13,26 @@
 </head>
 <body>
 
-<div id="app">{{ message }}</div>
+<div id="app"></div>
+<div id="app2">
+    <button @click="count++">{{ count }}</button>
+</div>
 
 <script type="module">
     import { createApp } from 'vue'
     import MyComponent from '/src/my-comp.js'
 
     createApp(MyComponent).mount('#app')
+
+    const app2 = createApp({
+        data() {
+            return {
+                count: 0
+            }
+        }
+    })
+
+    app2.mount('#app2')
 </script>
 </body>
 </html>

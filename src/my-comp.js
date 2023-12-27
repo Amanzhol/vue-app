@@ -2,7 +2,8 @@ import { ref } from 'vue'
 export default {
     setup() {
         const count = ref(12312)
-        return { count }
+        const test = ref("Value")
+        return { count, test }
     },
-    template: `<div>count is {{ count }}</div>`
+    template: `<div>count is {{ count }} - {{ test }}</div>`
 }
