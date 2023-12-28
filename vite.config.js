@@ -11,6 +11,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
+      "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js"
     }
   }
 })

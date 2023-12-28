@@ -3,36 +3,208 @@
 <head>
     <meta charset="UTF-8">
     <title>Play</title>
-    <script type="importmap">
-        {
-          "imports": {
-            "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js"
-          }
-        }
-    </script>
+    <script src="https://unpkg.com/vue@next"></script>
 </head>
 <body>
 
-<div id="app"></div>
-<div id="app2">
-    <button @click="count++">{{ count }}</button>
+<div id="counter" style="margin-bottom: 8px">
+    Счётчик: {{ counter }}
 </div>
 
-<script type="module">
-    import { createApp } from 'vue'
-    import MyComponent from '/src/my-comp.js'
+==========================================================================
 
-    createApp(MyComponent).mount('#app')
+<div id="bind-attr" style="margin-bottom: 8px">
+    <span v-bind:title="msg">Наведи на меня курсор на пару секунд, чтобы
+    увидеть динамически связанное значение title!</span>
 
-    const app2 = createApp({
+</div>
+
+==========================================================================
+
+<div id="event-handling" style="margin-bottom: 8px">
+    <p>{{ message }}</p>
+    <button v-on:click="reverseMessage">Перевернуть сообщение</button>
+</div>
+
+==========================================================================
+
+<div id="two-way-binding" style="margin-bottom: 8px">
+    <p>{{ message }}</p>
+    <input v-model="message" />
+</div>
+
+==========================================================================
+
+<div id="conditional-rendering" style="margin-bottom: 8px">
+    <p v-if="seen">Сейчас меня видно</p>
+    <button v-on:click="setVisibility">Видимость</button>
+</div>
+
+==========================================================================
+
+<div id="list-rendering" style="margin-bottom: 8px">
+    <ol>
+        <li v-for="todo in todos">
+            {{ todo.text }}
+        </li>
+    </ol>
+</div>
+
+==========================================================================
+
+<div id="template" style="margin-bottom: 8px">
+    <ol>
+        <todo-item v-for="todo in todos">{{todo.text}}</todo-item>
+    </ol>
+</div>
+
+==========================================================================
+
+<div id="todo-list-app">
+<ol>
+
+</ol>
+</div>
+
+==========================================================================
+
+<script>
+
+    const TodoItem2 = {
+        props: ['todo'],
+        template: '<li>{{todo.text}}</li>'
+    }
+
+    const TodoList = {
+
+    }
+</script>
+
+<script>
+    const TodoItem = {
+        template: `<li><slot /></li>`
+    }
+
+    // Создаём Vue-приложение
+    const app = Vue.createApp({
         data() {
             return {
-                count: 0
+                todos: [
+                    { text: 'Kuala Lumpur' },
+                    { text: 'Vandals Cave' },
+                    { text: 'Mango Bango' }
+                ]
             }
+        },
+        components: {
+            TodoItem // Регистрируем новый компонент
         }
     })
 
-    app2.mount('#app2')
+    app.mount("#template")
+</script>
+
+<script>
+
+    const ListRendering = {
+        data() {
+            return {
+                todos: [
+                    { text: 'Learn JavaScript' },
+                    { text: 'Learn Vue' },
+                    { text: 'Build something awesome' }
+                ]
+            }
+        }
+    }
+
+    Vue.createApp(ListRendering).mount('#list-rendering')
+</script>
+
+
+<script>
+
+    const ConditionalRendering = {
+        data() {
+            return {
+                seen: true
+            }
+        },
+        methods: {
+            setVisibility() {
+                this.seen = !this.seen
+            }
+        }
+    }
+
+    Vue.createApp(ConditionalRendering).mount('#conditional-rendering')
+
+</script>
+
+<script>
+
+    const TwoWayBinding = {
+        data() {
+            return {
+                message: 'Привет, Vue!'
+            }
+        }
+    }
+
+    Vue.createApp(TwoWayBinding).mount('#two-way-binding')
+
+</script>
+
+<script>
+    const event_handling = {
+        data() {
+            return {
+                message: 'Привет, Vue.js'
+            }
+        },
+        methods: {
+            reverseMessage() {
+                this.message = this.message
+                    .split('')
+                    .reverse()
+                    .join('')
+            }
+        }
+    }
+
+    Vue.createApp(event_handling).mount("#event-handling")
+</script>
+
+<script>
+    const attr_bind = {
+        data() {
+            return {
+                msg: 'page loaded ' + new Date().toLocaleString()
+            }
+        }
+    }
+
+    Vue.createApp(attr_bind).mount("#bind-attr")
+
+</script>
+
+<script>
+    const counter = {
+        data() {
+            return {
+                counter: 0
+            }
+        },
+        mounted() {
+
+            setInterval(() => {
+
+                this.counter++
+            },500)
+        }
+    }
+
+    Vue.createApp(counter).mount('#counter')
 </script>
 </body>
 </html>
