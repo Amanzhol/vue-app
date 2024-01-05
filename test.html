@@ -7,11 +7,60 @@
 </head>
 <body>
 
-<div id="dynamic-attr">
-    <p><a v-bind:[attr] = "blossom"></a></p>
+<div id="computed-attr">
+    Books available: <strong>{{ checkBooks }}</strong>
 </div>
 
 <script>
+
+    Vue.createApp({
+        data(){
+            return {
+                author: {
+                    name: 'John Doe',
+                    books: [
+                        'Vue 2 - Advanced Guide',
+                        'Vue 3 - Basic Guide',
+                        'Vue 4 - The Mystery'
+                    ]
+                }
+            }
+        },
+        computed: {
+            checkBooks() {
+                return (this.author.books.length > 0 ? 'Yes' : 'No')
+            }
+        }
+    }).mount("#computed-attr")
+
+
+</script>
+
+==========================================================================
+
+<div id="dynamic-attr">
+    <p><a v-bind:[bind_attr] = "dyn_attr">{{dyn_attr}}</a></p>
+    <p><button v-on:click="random">Random Attr</button></p>
+</div>
+
+<script>
+    Vue.createApp({
+        data() {
+            return {
+                bind_attr: '',
+                dyn_attr: 'one time',
+            }
+        },
+        methods: {
+            random() {
+                let bind_attr, num = Math.round(Math.random() * 10);
+                if (num % 2 === 0) bind_attr = 'title'
+                else bind_attr = 'href'
+                this.bind_attr = bind_attr
+                this.dyn_attr = num
+            }
+        }
+    }).mount('#dynamic-attr')
 
 </script>
 
