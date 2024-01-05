@@ -7,6 +7,78 @@
 </head>
 <body>
 
+<div id="dynamic-attr">
+    <p><a v-bind:[attr] = "blossom"></a></p>
+</div>
+
+<script>
+
+</script>
+
+
+==========================================================================
+
+<div id="raw-html">
+    <p>Как текст: {{just_text}}</p>
+    <p>Как html: <span v-html="just_text"></span></p>
+    <p><a v-bind:href="url" target="_blank">Магазин</a></p>
+    <p>
+        <button v-on:click="url_change('http://alser.kz')">Alser</button>
+        <button v-on:click="url_change('http://sulpak.kz')">Sulpak</button>
+    </p>
+</div>
+
+<script>
+    Vue.createApp({
+        data(){
+            return {
+                url : "man",
+                just_text: "<strong>Rendered as Bold</strong>"
+            }
+        },
+        methods: {
+            url_change(url) {
+                return this.url = url
+            },
+            url_alser() {
+                return this.url = "http://alser.kz"
+            },
+            url_sulpak() {
+                return this.url = "http://sulpak.kz"
+            }
+        }
+    }).mount('#raw-html')
+</script>
+
+==========================================================================
+
+<div id="once-interpolation" style="margin-bottom: 8px">
+    <span v-once>{{msg}}</span>
+</div>
+
+<script>
+    Vue.createApp({
+        data() {
+            return {
+                msg: 'rendered once'
+            }
+        },
+        methods: {
+            methodThatForcesUpdate() {
+                this.$forceUpdate();  // Notice we have to use a $ here
+            }
+        },
+        mounted() {
+            setTimeout(() => {
+                this.msg = "updated"
+            },1500)
+            // this.$forceUpdate();
+        }
+    }).mount('#once-interpolation')
+</script>
+
+==========================================================================
+
 <div id="counter" style="margin-bottom: 8px">
     Счётчик: {{ counter }} {{what_else}}
 </div>
