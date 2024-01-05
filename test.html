@@ -7,6 +7,47 @@
 </head>
 <body>
 
+<div id="computed-setter">
+    <p>{{msg}}</p>
+    <input type="text" ref="input">
+    <button v-on:click="setMsg">Change</button>
+</div>
+
+<script type="module">
+    import {ref} from "vue";
+
+    Vue.createApp({
+        data() {
+            return {
+                msg : 'DSFDLKg'
+            }
+        },
+        setup() {
+            const input = ref(null)
+            return {
+                input
+            }
+        },
+        methods: {
+            setMsg() {
+                this.msgChange = this.input.value
+            }
+        },
+        computed: {
+            msgChange: {
+                get() {
+                    return this.msg
+                },
+                set(newVal) {
+                    this.msg = newVal
+                }
+            }
+        }
+    }).mount('#computed-setter')
+</script>
+
+==========================================================================
+
 <div id="computed-attr">
     Books available: <strong>{{ checkBooks }}</strong>
 </div>
