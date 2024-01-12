@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Comp</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+<div id="app">
+    <button-counter title="Out"></button-counter>
+    <button-counter title="Mjuin"></button-counter>
+    <blog-post v-for="item in posts" :title="item.title" :key="item.id"></blog-post>
+</div>
+<script>
+    const app = Vue.createApp({
+        data() {
+            return {
+                posts: [
+                    {id: 1, title: 'Javelin'},
+                    {id: 2, title: 'Liopa'},
+                    {id: 3, title: 'Kilimandjro'},
+                ]
+            }
+        },
+    })
+    app.component('blog-post',{
+        props:['title'],
+        template:`<h2>{{title}}</h2>`
+    })
+    app.component('button-counter',{
+        props: ['title'],
+        data() {
+            return {
+                count: 0
+            }
+        },
+        template: `<h3>{{title}}</h3><p>
+          <button @click="count++">
+          Click counter - {{count}}
+        </button></p>`
+    }).mount('#app')
+</script>
+
+</body>
+</html>
