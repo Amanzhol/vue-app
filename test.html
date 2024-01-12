@@ -4,10 +4,147 @@
     <meta charset="UTF-8">
     <title>Play</title>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <style>
+        .bg-green {
+            background-color: green;
+            padding: 5px;
+            border: green 2px solid;
+        }
+        .bg-red {
+            background-color: darkred;
+            padding: 5px;
+            border: darkred 2px solid;
+            color: white;
+        }
+        .color-yellow {
+            background-color: yellow;
+            color: black;
+        }
+    </style>
 </head>
 <body>
 
-<div id="computed-setter">
+<div id="display-list">
+    <button type="button" @click="sortAtoms">Sort By Asc</button>
+    <button type="button" @click="pushRandomAtom">Push Atom</button>
+    <button type="button" @click="popRandomAtom">Pop Random Atom</button>
+    <ul v-if="atomsIsActive"><li v-for="atom in atoms">{{atom.title}}</li></ul>
+</div>
+
+<script>
+    Vue.createApp({
+        data() {
+            return {
+                atomsIsActive: true,
+                atoms : [
+                    {id: 2, title:'Body Parts'},
+                    {id: 5, title:'Consciousness'},
+                    {id: 1, title:'Universe'},
+                ]
+            }
+        },
+        methods: {
+            sortAtoms() {
+                this.atoms.sort(function(a,b) { return a.id - b.id;});
+            },
+            pushRandomAtom() {
+                this.atoms.push({
+                    id: this.atoms.length + 1,
+                    title: 'New Item:' + (this.atoms.length + 1)
+                })
+            },
+            popRandomAtom() {
+                this.atoms.pop()
+            }
+
+        }
+    }).mount('#display-list');
+</script>
+
+==========================================================================
+
+<div id="conditionals">
+    
+    <h3 v-if="isActive">Here If is <span style="text-decoration: underline red">True</span></h3>
+    <h3 v-else>Else <span style="text-decoration: underline red">True</span></h3>
+    <h3 v-show="showIsActive">Here is V-show</h3>
+
+</div>
+
+<script>
+    Vue.createApp({
+        data() {
+            return {
+                isActive: true,
+                showIsActive: false
+            }
+        }
+    }).mount('#conditionals')
+</script>
+
+
+==========================================================================
+
+<div id="watch-example" style="margin-bottom: 8px">
+
+    <p :class="[bgClass,newColorClass]">Class List as array</p>
+
+    <p :class="classObj">
+        Задайте вопрос, на который можно ответить «да» или «нет»:
+        <input v-model="question" />
+    </p>
+    <p>{{ answer }}</p>
+    <p>Old: {{ old_question }}</p>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/axios@0.12.0/dist/axios.min.js"></script>
+<script>
+    const watchExampleVM = Vue.createApp({
+        data() {
+            return {
+                classObj: {
+                    'bg-red':true
+                },
+                bgClass: 'bg-red',
+                newColorClass: 'color-yellow',
+                isActive:true,
+                question: '',
+                answer: 'Вопросы обычно заканчиваются вопросительным знаком. ;-)',
+                old_question: '',
+                classObject: {
+
+                }
+            }
+        },
+        watch: {
+            // при каждом изменении `question` эта функция будет запускаться
+            question(newQuestion, oldQuestion) {
+                if (newQuestion.indexOf('?') > -1) {
+                    this.old_question = oldQuestion
+                    this.getAnswer()
+                }
+            }
+        },
+        methods: {
+            getAnswer() {
+                this.answer = 'Думаю...'
+                axios
+                    .get('https://yesno.wtf/api')
+                    .then(response => {
+                        this.answer = response.data.answer
+                    })
+                    .catch(error => {
+                        this.answer = 'Ошибка! Нет доступа к API. ' + error
+                    })
+            }
+        }
+    }).mount('#watch-example')
+</script>
+
+==========================================================================
+
+<div id="computed-setter" style="margin-bottom: 8px">
+    <button v-bind:disabled = "isButtonDisabled">Check Disability Status</button>
     <p>{{msg}}</p>
     <input type="text" ref="input">
     <button v-on:click="setMsg">Change</button>
@@ -19,6 +156,7 @@
     Vue.createApp({
         data() {
             return {
+                isButtonDisabled:'',
                 msg : 'DSFDLKg'
             }
         },
@@ -48,7 +186,7 @@
 
 ==========================================================================
 
-<div id="computed-attr">
+<div id="computed-attr" style="margin-bottom: 8px">
     Books available: <strong>{{ checkBooks }}</strong>
 </div>
 
@@ -79,7 +217,7 @@
 
 ==========================================================================
 
-<div id="dynamic-attr">
+<div id="dynamic-attr" style="margin-bottom: 8px">
     <p><a v-bind:[bind_attr] = "dyn_attr">{{dyn_attr}}</a></p>
     <p><button v-on:click="random">Random Attr</button></p>
 </div>
@@ -108,9 +246,9 @@
 
 ==========================================================================
 
-<div id="raw-html">
+<div id="raw-html" style="margin-bottom: 8px">
     <p>Как текст: {{just_text}}</p>
-    <p>Как html: <span v-html="just_text"></span></p>
+    <p>Как html: <span id="tttt" v-html="just_text"></span></p>
     <p><a v-bind:href="url" target="_blank">Магазин</a></p>
     <p>
         <button v-on:click="url_change('http://alser.kz')">Alser</button>
